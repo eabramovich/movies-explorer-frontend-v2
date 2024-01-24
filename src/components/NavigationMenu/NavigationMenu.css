@@ -1,4 +1,4 @@
-.navigation__menu {
+.navigation {
     list-style-type: none;
     align-items: center;
     padding: 0;
@@ -19,6 +19,11 @@
     text-decoration: none;
 }
 
+.navigation__menu-link:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
 .navigation__menu-link_active { 
     font-weight: 500;
 }
@@ -28,7 +33,7 @@
 }
 
 @media screen and (max-width:768px) {
-    .navigation__menu {
+    .navigation {
         flex-flow: column;
         justify-content: space-between;
         align-items: center;

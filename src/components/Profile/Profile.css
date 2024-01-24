@@ -48,7 +48,7 @@
 }
 
 .profile__form-button:hover {
-    opacity: 0.8;
+    opacity: 0.5;
     cursor: pointer;
 }
 
@@ -62,11 +62,25 @@
 }
 
 .profile__logout:hover {
-    opacity: 0.8;
+    opacity: 0.5;
 }
 
 @media screen and (max-width: 475px) {
     .profile {
         width: 260px;
+        margin: 68px auto;
+    }
+
+    .profile__form {
+        margin-top: 65px;
+    }    
+
+    .profile__form-button {
+        margin-top: 360px;
+        font-size: 12px;
+    }
+
+    .profile__logout {
+        font-size: 13px;
     }
 }

@@ -19,13 +19,6 @@ function Header({ isLoggedIn }) {
       }`}
     >
       <Logo />
-      {/* {isLoggedIn && (
-        <div className={`header__menu-wrapper ${isBurgerMenuActive ? "header__menu-wrapper_burger-active" : ""}`}>
-          {isLoggedIn && <NavigationMenu isLoggedIn={isLoggedIn} />}
-          {isLoggedIn && <AccountMenu isLoggedIn={isLoggedIn} />}
-          <div className={`burger-menu ${isBurgerMenuActive ? "burger-menu_active" : ""} ${location.pathname !== "/" ? "burger-menu_theme_light" : "" }`} onClick={() => setIsBurgerMenuActive(!isBurgerMenuActive)}><span></span></div>
-        </div>
-      )} */}
       {isLoggedIn && (
         <>
           <div
@@ -48,11 +41,8 @@ function Header({ isLoggedIn }) {
           </div>
         </>
       )}
-      {/* <div className="header__menu-wrapper">
-        {isLoggedIn && <NavigationMenu isLoggedIn={isLoggedIn} />}
-        {isLoggedIn && <AccountMenu isLoggedIn={isLoggedIn} />}
-      </div> */}
       {!isLoggedIn && (
+        <nav>
         <ul className="header__auth-menu">
           <li className="header__auth-menu-item">
             <Link to="/signup" className="header__auth-menu-link">
@@ -68,6 +58,7 @@ function Header({ isLoggedIn }) {
             </Link>
           </li>
         </ul>
+        </nav>
       )}
     </header>
   );

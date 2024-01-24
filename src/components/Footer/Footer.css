@@ -42,7 +42,7 @@
 }
 
 .footer__nav-link:hover {
-    opacity: 0.8;
+    opacity: 0.5;
     cursor: pointer;
 }
 
@@ -55,7 +55,7 @@
 
 @media screen and (max-width: 475px) {
     .footer {
-        padding: 61px 10px 20px;
+        padding: 63px 10px 20px;
     }
 
     .footer__title {

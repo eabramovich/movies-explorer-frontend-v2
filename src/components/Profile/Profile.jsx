@@ -23,7 +23,7 @@ function Profile() {
   return (
     <>
       <Header isLoggedIn={isLoggedIn} />
-      <div className="profile">
+      <main className="profile">
         <h1 className="welcome-title welcome-title_location_profile">
           Привет, {currentUser.name}!
         </h1>
@@ -75,7 +75,7 @@ function Profile() {
         <Link to="/" className="profile__logout" onClick={handleLogout}>
           Выйти из аккаунта
         </Link>
-      </div>
+      </main>
     </>
   );
 }

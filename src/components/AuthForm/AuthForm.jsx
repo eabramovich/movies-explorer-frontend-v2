@@ -15,6 +15,10 @@ function AuthForm({ name, buttonText }) {
               type="text"
               id="username"
               name="username"
+              placeholder="Имя"
+              minLength="2"
+              maxLength="40"
+              required
             />
             <span className="auth-form__item-error" />
           </>
@@ -27,6 +31,8 @@ function AuthForm({ name, buttonText }) {
           type="email"
           id="email"
           name="email"
+          placeholder="E-mail"
+          required
         />
         <span className="auth-form__item-error" />
         <label htmlFor="password" className="auth-form__label">
@@ -37,6 +43,10 @@ function AuthForm({ name, buttonText }) {
           type="password"
           id="password"
           name="password"
+          placeholder="Пароль"
+          minLength="8"
+          maxLength="40"
+          required
         />
         <span className="auth-form__item-error auth-form__item-error_active">
           Что-то пошло не так...

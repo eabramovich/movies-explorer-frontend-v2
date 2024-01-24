@@ -8,8 +8,8 @@ function SearchForm() {
       <form className="search-form__form">
         <input className="search-form__input" name="s" placeholder="Фильм" type="search" />
         <input className="search-form__submit" type="submit" value="Найти" />
+        <FilterCheckbox />
       </form>
-      <FilterCheckbox />
     </section>
   );
 }

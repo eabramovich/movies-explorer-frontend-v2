@@ -4,9 +4,9 @@ import "./Technology.css";
 function Technology() {
   return (
     <section className="technology section">
-      <h3 className="section-title">Технологии</h3>
+      <h2 className="section-title">Технологии</h2>
       <div className="technology__content">
-        <h2 className="section-caption">7 технологий</h2>
+        <h3 className="section-caption">7 технологий</h3>
         <p className="technology__description">
           На курсе веб-разработки мы освоили технологии, которые применили в
           дипломном проекте.

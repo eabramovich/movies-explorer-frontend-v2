@@ -26,7 +26,7 @@ function NavigationMenu({ isLoggedIn }) {
   ];
 
   return (
-    <nav className="navigation__menu">
+    <nav className="navigation">
       {menuItems.map((item) => (
         <NavLink
           key={item.id}

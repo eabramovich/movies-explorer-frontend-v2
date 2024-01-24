@@ -23,6 +23,10 @@
     padding-top: 5px;
 }
 
+.auth-form__input::placeholder {
+    opacity: 0;
+}
+
 .auth-form__input_error_active {
     color: #FF3055;
 }

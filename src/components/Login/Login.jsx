@@ -6,7 +6,7 @@ import AuthForm from "../AuthForm/AuthForm";
 
 function Login() {
   return (
-      <div className="auth-content">
+      <main className="auth-content">
         <div className="auth-content__header">
           <Logo />
           <h1 className="welcome-title">Рады видеть!</h1>
@@ -18,7 +18,7 @@ function Login() {
           Регистрация
         </Link>
       </div>
-      </div>
+      </main>
   );
 }
 

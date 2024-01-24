@@ -5,7 +5,6 @@
 
 .search-form__form {
     position: relative;
-    border-bottom: 1px solid #E8E8E8;
 }
 
 .search-form__input {
@@ -13,6 +12,11 @@
     border: none;
     padding: 0;
     height: 49px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.search-form__input:hover {
+    cursor: pointer;
 }
 
 .search-form__input:focus {
@@ -51,7 +55,7 @@
         padding-left: 30px;
         padding-right: 30px;
         padding-top: 78px;
-        padding-bottom: 59px;
+        padding-bottom: 60px;
     }
 }
 

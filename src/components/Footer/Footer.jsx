@@ -4,10 +4,10 @@ import "./Footer.css";
 
 function Footer() {
   return (
-    <div className="footer">
-      <h6 className="footer__title">
+    <footer className="footer">
+      <h3 className="footer__title">
         Учебный проект Яндекс.Практикум х BeatFilm.
-      </h6>
+      </h3>
       <div className="footer__content">
         <p className="footer__copyright">&copy; 2024</p>
         <nav>
@@ -33,7 +33,7 @@ function Footer() {
           </ul>
         </nav>
       </div>
-    </div>
+    </footer>
   );
 }
 

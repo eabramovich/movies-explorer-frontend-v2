@@ -94,6 +94,7 @@
 
     .about-project__description {
         flex-flow: column;
+        margin-top: 53px;
     }
 
     .about-project__detail-title {

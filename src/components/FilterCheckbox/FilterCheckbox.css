@@ -1,57 +1,8 @@
-/* .filter-checkbox {
-    padding-top: 34px;
-    align-items: center;
-    display: flex;
-    gap: 15px;
-}
-
-.filter-checkbox__wrapper {
-    
-}
-
-.filter-checkbox__invisible-checkbox {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(0 0 0 0);
-}
-
-.filter-checkbox__invisible-checkbox + .filter-checkbox__visible-checkbox-wrapper {
-    width: 34px;
-    height: 14px;
-    border-radius: 20px;
-    display: block;
-    position: relative;
-}
-
-.filter-checkbox__invisible-checkbox:checked + .filter-checkbox__visible-checkbox-wrapper {
-    background: #2BE080;
-}
-
-.filter-checkbox__invisible-checkbox:disabled + .filter-checkbox__visible-checkbox-wrapper {
-    background: #E8E8E8;
-}
-
-.filter-checkbox__visible-checkbox {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #FFF;
-    display: block;
-    position: absolute;
-    top: 2px;
-    right: 1px;
-} */
-
-/* 
-} */
-
 .movies-filter {
-    padding-top: 34px;
     align-items: center;
     display: flex;
     gap: 15px;
+    margin-top: 35px;
 }
 
 .switch-label {
@@ -97,6 +48,11 @@
     border-radius: 50%;
 }
 
+.movies-filter__slider:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
 .movies-filter__checkbox:checked + .movies-filter__slider {
     background-color: #2BE080;
 }
@@ -118,7 +74,7 @@
 @media screen and (max-width: 1024px) {
     .movies-filter {
         flex-flow: row-reverse;
-        padding-top: 31px;
+        margin-top: 31px;
         gap: 14px;
 
     }
@@ -127,11 +83,12 @@
 @media screen and (max-width: 475px) {
     .movies-filter {
         justify-content: center;
-        padding-top: 42px;
+        margin-top: 45px;
         gap: 10px 
     }
 
     .movies-filter__label {
         font-size: 11px;
+        
     }
 }

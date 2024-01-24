@@ -6,7 +6,7 @@ import AuthForm from "../AuthForm/AuthForm";
 
 function Register() {
   return (
-      <div className="auth-content">
+      <main className="auth-content">
         <div className="auth-content__header">
           <Logo />
           <h1 className="welcome-title">Добро пожаловать!</h1>
@@ -18,7 +18,7 @@ function Register() {
           Войти
         </Link>
       </div>
-      </div>
+      </main>
   );
 }
 
