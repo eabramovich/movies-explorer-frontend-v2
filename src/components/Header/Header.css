@@ -1,0 +1,224 @@
+.header {
+    padding: 18px 70px;
+    background-color: #073042;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header__menu-blur {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header__menu-wrapper {
+    display: flex;
+    width: 59%;
+    justify-content: space-between;
+}
+
+.header__menu-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__auth-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.header__auth-menu-link {
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.header_theme_light {
+    background-color: #FFF;
+}
+
+.header__login-link {
+    width: 76px;
+    height: 32px;
+    color: #000000;
+    background-color: #2BE080;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header__auth-menu-link:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.burger-menu {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    .header {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .burger-menu {
+        display: block;
+        position: relative;
+        width: 28px;
+        height: 24px;
+    }
+
+    .burger-menu span {
+        position: absolute;
+        background-color: #FFF;
+        position: absolute;
+        right: 8px;
+        width: 100%;
+        height: 3px;
+        top: 11px;
+    }
+
+    .burger-menu:before,
+    .burger-menu:after {
+        content: '';
+        background-color: #FFF;
+        position: absolute;
+        width: 100%;
+        height: 3px;
+        right: 8px;
+    }
+
+    .burger-menu:before {
+        top: 1px;
+    }
+
+    .burger-menu:after {
+        bottom: 0;
+    }
+
+    .burger-menu_theme_light span {
+        background-color: #000;
+    }
+
+    .burger-menu_theme_light:before,
+    .burger-menu_theme_light:after {
+        content: '';
+        background-color: #000;
+    }
+
+    .header__menu-wrapper {
+        justify-content: flex-end;
+        transform: translateX(100%);
+        transition: transform  0.5s ease;
+    }
+    
+    .header__menu-wrapper .navigation__menu,
+    .header__menu-wrapper .account-menu {
+        display: none;
+    }
+
+    .header__menu-wrapper_burger-active {
+        display: flex;
+        justify-content: space-between;
+        transform: translateX(0);
+        transition: transform 0.5s ease;
+    }
+
+    .header__menu-wrapper_burger-active .navigation__menu {
+        display: flex;
+    }
+    .header__menu-wrapper_burger-active .account-menu {
+        display: block;
+    }
+
+    .header__menu-wrapper_burger-active {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(7, 48, 66, 0.3);
+        display: flex;
+        justify-content: flex-end;
+        z-index: 20;
+        padding-bottom: 90px;
+    }
+
+    .header__menu-wrapper_burger-active .header__menu-content {
+        flex-flow: column;
+        align-items: center;
+        background: #073042;
+        width: 68%;
+        
+    }
+
+    .header_theme_light .header__menu-content {
+        background: #FFF;
+    }
+
+    .burger-menu_active {
+        position: absolute;
+        z-index: 25;
+        top: 23px;
+        right: 17px;
+        width: 28px;
+    }
+
+    .burger-menu_active:before {
+        transform: rotate(45deg);
+        top: 10px;
+    }
+
+    .burger-menu_active:after {
+        transform: rotate(-45deg);
+        bottom: 11px;
+    }
+
+    .burger-menu_active span {
+        transform: scale(0);
+    }
+}
+
+@media screen and (max-width:475px) {
+    .header {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .header__login-link {
+        width: 54px;
+        height: 26px;
+    }
+
+    .header__auth-menu {
+        gap: 14px;
+    }
+
+    .header__auth-menu-link {
+        font-size: 10px;
+    }
+
+    .header__menu-wrapper_burger-active .header__menu-content {
+        width: 100%;
+    }
+
+    .burger-menu {
+        width: 22px;
+        height: 22px;
+    }
+
+    .burger-menu_active:after {
+        bottom: 9px;
+    }
+}

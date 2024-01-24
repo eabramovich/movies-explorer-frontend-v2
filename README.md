@@ -1,6 +1,8 @@
 # movies-explorer-frontend
 
 Репозиторий фронтенд части для приложения проекта "Movies-Explorer".
+Это копия репозитория https://github.com/eabramovich/movies-explorer-frontend.
+Причина его создания - отсутствие ветки main в первом репозитории.
 
 ## Запуск проекта
 

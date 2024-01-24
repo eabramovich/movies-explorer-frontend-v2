@@ -1,0 +1,47 @@
+.account-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    gap: 30px;
+}
+
+.account-menu__link {
+    color: #000000;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    width: 100px;
+    height: 32px;
+    border-radius: 25px;
+    background-color: #2BE080;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding-left: 11px;
+    padding-right: 3px;
+}
+
+.account-menu__link_theme_light {
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 4px rgba(0,0,0, .25);
+}
+
+.account-menu__icon-frame {
+    width: 26px;
+    height: 26px;
+    background-color: #FFF;
+    border-radius: 50%;
+    display: flex;
+}
+
+.account-menu__icon {
+    object-fit: none;
+}
+
+@media screen and (max-width: 768px) {
+    .account-menu {
+        margin-bottom: 90px;
+    }
+    
+}

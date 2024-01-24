@@ -1,0 +1,137 @@
+/* .filter-checkbox {
+    padding-top: 34px;
+    align-items: center;
+    display: flex;
+    gap: 15px;
+}
+
+.filter-checkbox__wrapper {
+    
+}
+
+.filter-checkbox__invisible-checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+}
+
+.filter-checkbox__invisible-checkbox + .filter-checkbox__visible-checkbox-wrapper {
+    width: 34px;
+    height: 14px;
+    border-radius: 20px;
+    display: block;
+    position: relative;
+}
+
+.filter-checkbox__invisible-checkbox:checked + .filter-checkbox__visible-checkbox-wrapper {
+    background: #2BE080;
+}
+
+.filter-checkbox__invisible-checkbox:disabled + .filter-checkbox__visible-checkbox-wrapper {
+    background: #E8E8E8;
+}
+
+.filter-checkbox__visible-checkbox {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #FFF;
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: 1px;
+} */
+
+/* 
+} */
+
+.movies-filter {
+    padding-top: 34px;
+    align-items: center;
+    display: flex;
+    gap: 15px;
+}
+
+.switch-label {
+    margin-right: 10px;
+}
+
+.movies-filter__switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 14px;
+}
+
+.movies-filter__checkbox {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+}
+
+.movies-filter__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.movies-filter__slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.movies-filter__checkbox:checked + .movies-filter__slider {
+    background-color: #2BE080;
+}
+
+.movies-filter__checkbox:focus + .movies-filter__slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+.movies-filter__checkbox:checked + .movies-filter__slider:before {
+    transform: translateX(17px);
+}
+
+.movies-filter__label {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.38;
+}
+
+@media screen and (max-width: 1024px) {
+    .movies-filter {
+        flex-flow: row-reverse;
+        padding-top: 31px;
+        gap: 14px;
+
+    }
+}
+
+@media screen and (max-width: 475px) {
+    .movies-filter {
+        justify-content: center;
+        padding-top: 42px;
+        gap: 10px 
+    }
+
+    .movies-filter__label {
+        font-size: 11px;
+    }
+}

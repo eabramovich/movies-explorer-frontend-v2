@@ -1,0 +1,118 @@
+.technology {
+    background: #F5F5F5;
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+.technology__content {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    padding-top: 90px;
+}
+
+.technology__title {
+    font-size: 22px;
+    letter-spacing: -0.9px;
+
+}
+
+.technology__description {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.56px;
+    max-width: 460px;
+    text-align: center;
+    margin: 26px 0 100px;
+}
+
+.technology__items {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(7, 90px);
+    gap: 10px;
+    height: 57px;
+    text-align: center;
+    align-items: center;
+}
+
+.technology__name {
+    background: #E8E8E8;
+    /* width: 90px; */
+    height: 57px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: -0.56px;
+}
+
+@media screen and (max-width: 1024px) {
+    .technology {
+        padding-top: 90px;
+        padding-bottom: 90px;
+    }
+
+    .technology__content {
+        padding-top: 80px;
+    }
+
+    .technology__items {
+        
+    }
+
+    .technology__description {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.5;
+        letter-spacing: -0.48px;
+        margin: 24px 0 81px;
+    }
+
+    .technology__name {
+        /* width: 84px;
+        height: 57px; */
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.5;
+        letter-spacing: -0.48px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .technology__items {
+        grid-template-columns: repeat(auto-fill, minmax(84px, 84px));
+        justify-content: center;
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media screen and (max-width: 475px) {
+    .technology {
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+
+    .technology__content {
+        padding-top: 64px;
+    }
+
+    .technology__description {
+        font-size: 11px;
+        line-height: 1.45;
+        letter-spacing: -0.44px;
+        margin: 28px 0 51px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .technology__items {
+        max-width: 178px;
+    }
+}

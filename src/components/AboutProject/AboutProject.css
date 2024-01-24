@@ -1,0 +1,132 @@
+.about-project {
+    padding-top: 110px;
+    padding-bottom: 110px;
+}
+
+.about-project__description {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 53px;
+}
+
+.about-project__detail-title {
+    color: #000000;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 71px 0px 28px;
+    letter-spacing: -0.9px;
+}
+
+.about-project__detail-description {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.about-project__timeline {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    margin-top: 95px;
+}
+
+.about-project__stage {
+    align-self: center;
+}
+
+.about-project__stage-duration {
+    font-size: 14px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px;
+}
+
+.about-project__stage-duration_type_backend {
+   background-color: #2BE080;
+}
+
+.about-project__stage-duration_type_frontend {
+    background-color: #F2F2F2;
+}
+
+.about-project__stage-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 16px 0 0;
+    margin: 0;
+    color: #A0A0A0;
+}
+
+@media screen and (max-width: 1024px) {
+    .about-project {
+        padding-top: 92px;
+        padding-bottom: 89px;
+    }
+
+    .about-project__description {
+        gap: 38px;
+    }
+
+    .about-project__detail-title {
+        margin: 71px 0px 23px;
+    }
+
+    .about-project__detail-description {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.5;
+    }
+
+    .about-project__timeline {
+        margin-top: 81px;
+    }
+}
+
+@media screen and (max-width: 475px) {
+    .about-project {
+        padding-top: 71px;
+        padding-bottom: 70px;
+    }
+
+    .about-project__description {
+        flex-flow: column;
+    }
+
+    .about-project__detail-title {
+        font-size: 18px;
+        letter-spacing: -0.72px;
+    }
+
+    .about-project__detail-title {
+        margin: 8px 0px 0px;
+    }
+
+    .about-project__detail-description {
+        font-size: 11px;
+        font-weight: 400;
+        line-height: 1.45;
+        margin-top: 18px;
+    }
+
+    .about-project__stage-duration {
+        font-size: 11px;
+    }
+
+    .about-project__timeline {
+        grid-template-columns: 1.75fr 3.25fr;
+        margin-top: 48px;
+    }
+
+    .about-project__stage-title {
+        font-size: 11px;
+        padding: 10px 0 0;
+    }
+
+}
+
+
+
