@@ -13,7 +13,7 @@ import AboutProject from "../AboutProject/AboutProject";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
 
   const user = {
