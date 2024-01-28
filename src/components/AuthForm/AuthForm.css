@@ -58,6 +58,20 @@
     opacity: 0;
 }
 
+.auth-form__error-message {
+    color: red;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 7px;
+    min-height: 18px;
+    opacity: 0;
+}
+
+.auth-form__error-message_active {
+    opacity: 1;
+}
+
 .auth-form__item-error_active {
     opacity: 1;
 }
@@ -71,7 +85,6 @@
     width: 100%;
     height: 45px;
     border: none;
-    margin-top: 125px;
 }
 
 .auth-form__button:hover {

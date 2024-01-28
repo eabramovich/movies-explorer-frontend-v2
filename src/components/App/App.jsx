@@ -11,6 +11,7 @@ import Login from "../Login/Login";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import AboutProject from "../AboutProject/AboutProject";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import mainApi from "../../utils/MainApi";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
@@ -76,6 +77,20 @@ function App() {
     },
   ]);
 
+  function handleRegister ({ name, email, password }) {
+    return mainApi
+    .signup({ name, email, password }) 
+    .then((res) => {
+      console.log(res);
+      return res;
+    })
+    .catch((err) => {
+      const jsonError = JSON.parse(err.message);
+      console.log(jsonError.message);
+      return Promise.reject(jsonError.message);
+    });
+  };
+
   return (
     <CurrentUserContext.Provider value={{currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn}}>
       <Routes>
@@ -83,7 +98,7 @@ function App() {
         <Route path="/movies" element={<Movies cards={cards} />} />
         <Route path="/saved-movies" element={<SavedMovies cards={cards} />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<Register />} />
+        <Route path="/signup" element={<Register onRegister={handleRegister}/>} />
         <Route path="/signin" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
         <Route path="/about-project-component" component={AboutProject} />
