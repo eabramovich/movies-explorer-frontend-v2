@@ -7,21 +7,25 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import MoreButton from "../MoreButton/MoreButton";
 import Footer from "../Footer/Footer";
+import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 
-function Movies({ cards }) {
+function Movies({ cards, onSearch }) {
   const { isLoggedIn } = React.useContext(CurrentUserContext);
+  const { moviesSearchResult, moviesSearchText, setMoviesSearchText } = React.useContext(CurrentMoviesContext);
   const [isMoviesLoading, setIsMoviesLoading] = React.useState(false);
+  console.log(isLoggedIn);
+  console.log(moviesSearchResult);
 
   return (
     <>
       <Header isLoggedIn={isLoggedIn} />
       <main className="content">
-        <SearchForm />
+        <SearchForm onSearch={onSearch} searchText={moviesSearchText} setSearchText={setMoviesSearchText} />
         {isMoviesLoading ? (
           <Preloader />
         ) : (
           <>
-            <MoviesCardList cards={cards}></MoviesCardList>
+            <MoviesCardList cards={moviesSearchResult}></MoviesCardList>
             <MoreButton />
           </>
         )}

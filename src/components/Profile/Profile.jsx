@@ -1,12 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Header from "../Header/Header";
 import "./Profile.css";
 
 function Profile() {
-  const { currentUser, isLoggedIn } = React.useContext(CurrentUserContext);
+  const { currentUser, isLoggedIn, setIsLoggedIn } = React.useContext(CurrentUserContext);
   const [isEditing, setIsEditing] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleEditClick = (e) => {
     e.preventDefault();
@@ -18,7 +19,12 @@ function Profile() {
     setIsEditing(false);
   };
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    localStorage.removeItem("moviesSearchResult");
+    navigate("/");
+  };
 
   return (
     <>

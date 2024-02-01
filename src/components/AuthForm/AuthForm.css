@@ -77,7 +77,7 @@
 }
 
 .auth-form__button {
-    background: #3456F3;
+    background: #E8E8E8;
     color: #FFF;
     font-size: 14px;
     font-weight: 500;
@@ -87,7 +87,11 @@
     border: none;
 }
 
-.auth-form__button:hover {
+.auth-form__button_active {
+    background-color: #3456F3;
+}
+
+.auth-form__button_active:hover {
     opacity: 0.8;
     cursor: pointer;
 }

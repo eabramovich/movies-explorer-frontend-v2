@@ -5,11 +5,12 @@ import "./MoviesCard.css";
 function MoviesCard({ card }) {
   const location = useLocation();
   const { image, nameRU, duration, isSaved } = card;
-
+  //console.log(card);
+  const imageUrl = image.url;
   return (
     <li className="movies-card">
       <div className="movies-card__image-wrapper">
-        <img className="movies-card__image" src={image} alt={nameRU} />
+        <img className="movies-card__image" src={`https://api.nomoreparties.co${imageUrl}`} alt={nameRU} />
       </div>
 
       <div className="movies-card__info">

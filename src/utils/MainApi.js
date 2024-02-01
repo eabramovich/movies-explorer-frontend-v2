@@ -16,6 +16,26 @@ class MainApi extends Api {
             }),
         });
     }
+
+    signin({ email, password }) {
+        return super._request('/signin', {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
+        });
+    }
+
+    getUserInfo(token) {
+        return super._request('/users/me', {
+            method: 'GET',
+            headers: {...this._headers,
+                Authorization: `Bearer ${token}`
+            },
+        });
+    }
 }
 
 const mainApi = new MainApi({

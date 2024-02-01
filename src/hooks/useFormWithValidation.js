@@ -8,11 +8,10 @@ export function useFormWithValidation() {
     const handleChange = (event) => {
         const target = event.target;
         const name = target.name;
-        const value = target.value;
+        const value = target.value.trim();
         setValues({...values, [name]: value});
         setErrors({...errors, [name]: target.validationMessage });
         setIsValid(target.closest("form").checkValidity());
-        
     };
 
     const resetForm = useCallback(

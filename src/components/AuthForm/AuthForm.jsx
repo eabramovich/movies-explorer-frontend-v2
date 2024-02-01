@@ -7,8 +7,8 @@ function AuthForm({ name, buttonText, onSubmit }) {
     useFormWithValidation();
   const submitButtonRef = React.useRef();
   const [errorMessage, setErrorMessage] = React.useState(null);
-  console.log(values);
-  console.log(errors);
+  //console.log(values);
+  //console.log(errors);
 
   React.useEffect(() => {
     if(isValid) {
@@ -23,11 +23,10 @@ function AuthForm({ name, buttonText, onSubmit }) {
     console.log(values);
     onSubmit(values)
     .then((res) => {
-      //resetForm();
-      console.log(res);
+      //console.log(res);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       setErrorMessage(err);
     })
   }
@@ -97,7 +96,7 @@ function AuthForm({ name, buttonText, onSubmit }) {
           id="password"
           name="password"
           placeholder="Пароль"
-          minLength="8"
+          minLength="5"
           maxLength="40"
           value={values.password ? values.password : ""}
           onChange={handleChange}
