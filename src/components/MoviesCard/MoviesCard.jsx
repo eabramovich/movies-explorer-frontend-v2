@@ -1,16 +1,30 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 import "./MoviesCard.css";
 
-function MoviesCard({ card }) {
+function MoviesCard({ movie }) {
   const location = useLocation();
-  const { image, nameRU, duration, isSaved } = card;
-  //console.log(card);
-  const imageUrl = image.url;
+  const { image, nameRU, duration, isSaved } = movie;
+  const { isSavedMovie, setIsSavedMovie } = React.useState(false)
+  console.log(movie);
+  // const imageUrl = `https://api.nomoreparties.co${image.url}`;
+  // const thumbnailUrl = `https://api.nomoreparties.co${image.formats.thumbnail.url}`;
+
+  const { saveMovie } = React.useContext(CurrentMoviesContext);
+
+  const handleActionIconClick = () => {
+    // movie.image = imageUrl;
+    // movie.movieId = movie.id;
+    // movie.thumbnail = thumbnailUrl;
+    console.log(movie);
+    saveMovie(movie);
+  };
+
   return (
     <li className="movies-card">
       <div className="movies-card__image-wrapper">
-        <img className="movies-card__image" src={`https://api.nomoreparties.co${imageUrl}`} alt={nameRU} />
+        <img className="movies-card__image" src={image} alt={nameRU} />
       </div>
 
       <div className="movies-card__info">
@@ -22,16 +36,17 @@ function MoviesCard({ card }) {
                 ? "movies-card__button_type_delete"
                 : ""
             } ${
-              location.pathname === "/movies" && isSaved
+              location.pathname === "/movies" && isSavedMovie
                 ? "movies-card__button_type_saved"
                 : ""
             } ${
-              location.pathname === "/movies" && !isSaved
+              location.pathname === "/movies" && !isSavedMovie
                 ? "movies-card__button_type_unsaved"
                 : ""
             }`}
             type="button"
             aria-label="Сохранить"
+            onClick={handleActionIconClick}
           ></button>
         </div>
         <span className="movies-card__duration">{duration}</span>

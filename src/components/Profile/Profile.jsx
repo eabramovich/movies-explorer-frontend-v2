@@ -23,6 +23,7 @@ function Profile() {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     localStorage.removeItem("moviesSearchResult");
+    localStorage.removeItem("moviesSearchText");
     navigate("/");
   };
 

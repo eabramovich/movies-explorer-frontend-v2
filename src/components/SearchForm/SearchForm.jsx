@@ -1,43 +1,43 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import "./SearchForm.css";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 
-function SearchForm({ onSearch, searchText, setSearchText }) {
-  const { values, errors, handleChange, isValid } = useFormWithValidation();
-  const [isChecked, setIsChecked] = React.useState(false);
-  // const [searchText, setSearchText] = React.useState('');
-  console.log(isChecked);
+function SearchForm({ onSearch, searchText, setSearchText, isFilterEnabled, setFilterEnabled, handleCheckboxChange}) {
+  const [isValid, setIsValid] = React.useState(false);
+  const formRef = React.useRef();
   const submitButtonRef = React.useRef();
   const searchInput = React.useRef();
-  const location = useLocation();
 
   React.useEffect(() => {
-    console.log(searchText);
-    if(searchText) {
+    if (formRef.current.checkValidity()) {
+      setIsValid(true);
       submitButtonRef.current.disabled = false;
     } else {
+      setIsValid(false);
       submitButtonRef.current.disabled = true;
     }
-    console.log(submitButtonRef.current.disabled);
-  }, [location, searchText]);
+  }, [searchText]);
 
   const onSearchTextChange = (e) => {
-    setSearchText(searchInput.current.value);
-    handleChange(e);
-  }
+    setSearchText(e.target.value);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(values.text.trim().length > 0) {
-      onSearch(values.text);
+    const resultText = searchText.trim();
+    if (resultText.length > 0) {
+      onSearch(resultText, isFilterEnabled);
     }
   };
 
   return (
     <section className="search-form section">
-      <form className="search-form__form" onSubmit={handleSubmit} noValidate>
+      <form
+        className="search-form__form"
+        ref={formRef}
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <input
           required
           ref={searchInput}
@@ -50,11 +50,17 @@ function SearchForm({ onSearch, searchText, setSearchText }) {
         />
         <input
           ref={submitButtonRef}
-          className={`search-form__submit ${isValid ? "search-form__submit_active" : ""}`}
+          className={`search-form__submit ${
+            isValid ? "search-form__submit_active" : ""
+          }`}
           type="submit"
           value="Найти"
         />
-        <FilterCheckbox isChecked={isChecked} setIsChecked={setIsChecked} />
+        <FilterCheckbox
+          isFilterEnabled={isFilterEnabled}
+          setIsFilterEnabled={setFilterEnabled}
+          onFilterCheckboxChange={handleCheckboxChange}
+        />
       </form>
     </section>
   );

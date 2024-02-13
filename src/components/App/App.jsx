@@ -17,14 +17,13 @@ import mainApi from "../../utils/MainApi";
 import moviesApi from "../../utils/MoviesApi";
 import MoviesList from "../../utils/MoviesList";
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
-  const [moviesSearchText, setMoviesSearchText] = React.useState('');
-  const [moviesSearchResult, setMoviesSearchResult] = React.useState([]);
-  //const [moviesSearchResult, setMoviesSearchResult] = React.useState(localStorage.getItem("moviesSearchResult"));
-  const [cards, setCards] = React.useState([]);
-  const moviesList = new MoviesList(cards);
+  // const [cards, setCards] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
+  //const moviesList = new MoviesList([]);
 
   const navigate = useNavigate();
 
@@ -47,38 +46,36 @@ function App() {
         .catch((err) => {
           console.log(err);
         });
-    }
 
-    const movies = localStorage.getItem("moviesSearchResult");
-    const moviesSearchText = localStorage.getItem("moviesSearchText");
-    if (movies) {
-      setMoviesSearchResult(movies);
-      setMoviesSearchText(moviesSearchText);
+      // console.log(localStorage.getItem("moviesSearchResult"));
+      // const movies = JSON.parse(localStorage.getItem("moviesSearchResult"));
+      // //const movies = localStorage.getItem("moviesSearchResult");
+      // const moviesSearchText = localStorage.getItem("moviesSearchText");
+      // console.log(movies);
+      // if (movies) {
+      //   setMoviesSearchResult(movies);
+      //   setMoviesSearchText(moviesSearchText);
+      // }
     }
   }, []);
 
   React.useEffect(() => {
     console.log("set cards");
-    moviesApi
-      .getFilms()
-      .then((res) => {
-        console.log(res);
-        setCards(res);
-        moviesList.setInitialCards(res);
+    if(isLoggedIn) {
+      const token = localStorage.getItem("token");
+      Promise.all([moviesApi.getFilms(), mainApi.getSavedMovies(token)])
+      .then((movies, savedMovies) => {
+        //console.log(res);
+        // setCards(movies);
+        // moviesList.setInitialCards(movies);
+        setSavedMovies(savedMovies);
       })
       .catch((err) => {
         console.log(err);
       });
+    }
+    
   }, [isLoggedIn]);
-
-  const onMoviesSearch = (text) => {
-    console.log(text);
-    let result = moviesList.filterMoviesListByName(text);
-    console.log(result);
-    setMoviesSearchResult(result);
-    localStorage.setItem("moviesSearchText", text);
-    localStorage.setItem("moviesSearchResult", result);
-  };
 
   const handleLogin = ({ email, password }) => {
     return mainApi
@@ -110,7 +107,8 @@ function App() {
       .signup({ name, email, password })
       .then((res) => {
         console.log(res);
-        return res;
+        handleLogin({ email, password });
+        //return res;
       })
       .catch((err) => {
         let jsonError = {};
@@ -125,11 +123,30 @@ function App() {
       });
   };
 
+  const saveMovie = (movie) => {
+    const token = localStorage.getItem("token");
+    mainApi.addNewMovie(movie, token)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
     <CurrentUserContext.Provider
       value={{ currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn }}
     >
-      <CurrentMoviesContext.Provider value={{ moviesSearchResult, moviesSearchText, setMoviesSearchText }}>
+      <CurrentMoviesContext.Provider
+        value={{
+          //moviesList,
+          saveMovie,
+          //moviesSearchResult,
+          //isMoviesFilterEnabled,
+          //setIsMoviesFilterEnabled,
+        }}
+      >
         <Routes>
           <Route path="/" element={<Main />} />
           <Route
@@ -137,15 +154,15 @@ function App() {
             element={
               <ProtectedRouteElement
                 element={Movies}
-                cards={moviesSearchResult}
-                onSearch={onMoviesSearch}
+                //cards={moviesSearchResult}
+                //onSearch={onMoviesSearch}
               />
             }
           />
           <Route
             path="/saved-movies"
             element={
-              <ProtectedRouteElement element={SavedMovies} cards={cards} />
+              <ProtectedRouteElement element={SavedMovies}  />
             }
           />
           <Route
