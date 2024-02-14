@@ -67,6 +67,13 @@ class MainApi extends Api {
     });
   }
 
+  removeMovie(movieId, token) {
+    return super._request("/movies/" + movieId, {
+      method: "DELETE",
+      headers: { ...this._headers, Authorization: `Bearer ${token}` },
+    });
+  }
+
   getSavedMovies(token) {
     return super._request("/movies", {
         method: "GET",

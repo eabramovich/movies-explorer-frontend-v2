@@ -8,10 +8,12 @@ import Footer from "../Footer/Footer";
 import "./SavedMovies.css";
 import MoviesList from "../../utils/MoviesList";
 import mainApi from "../../utils/MainApi";
+import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 
 function SavedMovies({ cards }) {
   const { isLoggedIn } = React.useContext(CurrentUserContext);
-  const [savedMovies, setSavedMovies] = React.useState([]);
+  const { savedMovies, setSavedMovies } = React.useContext(CurrentMoviesContext);
+  //const [savedMovies, setSavedMovies] = React.useState([]);
   const [isSavedMoviesLoading, setIsMoviesLoading] = React.useState(false);
   const [savedMoviesSearchResult, setSavedMoviesSearchResult] = React.useState(
     () => {
@@ -51,11 +53,14 @@ function SavedMovies({ cards }) {
         // setCards(movies);
         // moviesList.setInitialCards(movies);
         setSavedMovies(savedMovies.data);
+        if(!savedMoviesSearchText) {
+          setSavedMoviesSearchResult(savedMovies.data);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [savedMoviesSearchText, setSavedMovies]);
 
   const onSavedMoviesSearch = (resultText, isFilterEnabled) => {
     //savedMoviesList.setInitialCards(savedMovies);
@@ -64,11 +69,24 @@ function SavedMovies({ cards }) {
       isFilterEnabled
     );
     setSavedMoviesSearchResult(result);
-    localStorage.setItem("moviesSearchText", savedMoviesSearchText);
-    localStorage.setItem("moviesSearchResult", JSON.stringify(result));
+    localStorage.setItem("savedMoviesSearchText", savedMoviesSearchText);
+    localStorage.setItem("savedMoviesSearchResult", JSON.stringify(result));
   };
 
-  const onFilterShortMovies = (e) => {};
+  const onFilterShortMovies = (e) => {
+    setIsSavedMoviesFilterEnabled(e.target.checked);
+    localStorage.setItem("isSavedMoviesFilterEnabled", JSON.stringify(e.target.checked));
+    if(savedMoviesSearchResult) {
+     
+      //if(!savedMoviesSearchText) {
+        savedMoviesList.setInitialCards(savedMovies);
+        console.log(savedMoviesList);
+      //}
+      let result = savedMoviesList.filterMoviesListByName(savedMoviesSearchText, e.target.checked);
+      setSavedMoviesSearchResult(result);
+      localStorage.setItem("savedMoviesSearchResult", JSON.stringify(result));
+    }
+  };
 
   return (
     <>

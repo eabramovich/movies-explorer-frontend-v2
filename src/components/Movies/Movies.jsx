@@ -13,14 +13,14 @@ import MoviesList from "../../utils/MoviesList";
 
 function Movies() {
   const { isLoggedIn } = React.useContext(CurrentUserContext);
-  //const { moviesList } = React.useContext(CurrentMoviesContext);
+  const { moviesSearchResult, setMoviesSearchResult } = React.useContext(CurrentMoviesContext);
   const [ movies, setMovies ] = React.useState([]);
   const [isMoviesLoading, setIsMoviesLoading] = React.useState(false);
 
-  const [moviesSearchResult, setMoviesSearchResult] = React.useState(() => {
-    const moviesSearchResult = localStorage.getItem("moviesSearchResult");
-    return moviesSearchResult ? JSON.parse(moviesSearchResult) : [];
-  });
+  // const [moviesSearchResult, setMoviesSearchResult] = React.useState(() => {
+  //   const moviesSearchResult = localStorage.getItem("moviesSearchResult");
+  //   return moviesSearchResult ? JSON.parse(moviesSearchResult) : [];
+  // });
   const [moviesSearchText, setMoviesSearchText] = React.useState(() => {
     const moviesSearchText = localStorage.getItem("moviesSearchText");
     return moviesSearchText ? moviesSearchText : '';
@@ -33,7 +33,7 @@ function Movies() {
   const moviesList = new MoviesList(movies);
 
   React.useEffect(() => {
-    console.log("set movies");
+   // console.log("set movies");
       moviesApi.getFilms()
       .then((movies) => {
         //console.log(res);
@@ -43,7 +43,7 @@ function Movies() {
           movie.movieId = movie.id;
           return movie;
         })
-        console.log(result);
+       // console.log(result);
         setMovies(result);
       })
       .catch((err) => {

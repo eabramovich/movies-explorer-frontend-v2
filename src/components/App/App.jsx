@@ -22,6 +22,10 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   // const [cards, setCards] = React.useState([]);
+  const [moviesSearchResult, setMoviesSearchResult] = React.useState(() => {
+    const moviesSearchResult = localStorage.getItem("moviesSearchResult");
+    return moviesSearchResult ? JSON.parse(moviesSearchResult) : [];
+  });
   const [savedMovies, setSavedMovies] = React.useState([]);
   //const moviesList = new MoviesList([]);
 
@@ -59,22 +63,35 @@ function App() {
     }
   }, []);
 
+  // React.useEffect(() => {
+  //   console.log("set cards");
+  //   if(isLoggedIn) {
+  //     const token = localStorage.getItem("token");
+  //     Promise.all([moviesApi.getFilms(), mainApi.getSavedMovies(token)])
+  //     .then((movies, savedMovies) => {
+  //       //console.log(res);
+  //       // setCards(movies);
+  //       // moviesList.setInitialCards(movies);
+  //       setSavedMovies(savedMovies);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   }
+    
+  // }, [isLoggedIn]);
+
   React.useEffect(() => {
-    console.log("set cards");
-    if(isLoggedIn) {
-      const token = localStorage.getItem("token");
-      Promise.all([moviesApi.getFilms(), mainApi.getSavedMovies(token)])
-      .then((movies, savedMovies) => {
-        //console.log(res);
-        // setCards(movies);
-        // moviesList.setInitialCards(movies);
-        setSavedMovies(savedMovies);
+    console.log("set saved cards");
+    const token = localStorage.getItem("token");
+    mainApi
+      .getSavedMovies(token)
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    }
-    
   }, [isLoggedIn]);
 
   const handleLogin = ({ email, password }) => {
@@ -125,9 +142,25 @@ function App() {
 
   const saveMovie = (movie) => {
     const token = localStorage.getItem("token");
-    mainApi.addNewMovie(movie, token)
+    return mainApi.addNewMovie(movie, token)
     .then((res) => {
       console.log(res);
+      setSavedMovies([...savedMovies, res.data]);
+      console.log(savedMovies);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const deleteMovie = (movie) => {
+    const token = localStorage.getItem("token");
+    console.log(savedMovies);
+    const movieId = savedMovies.find((savedMovie) => savedMovie.movieId !== movie.movieId)._id;
+    return mainApi.removeMovie(movieId, token)
+    .then((res) => {
+      console.log(res);
+      setSavedMovies(savedMovies.filter((savedMovie) => savedMovie.movieId !== movie.movieId));
     })
     .catch((err) => {
       console.log(err);
@@ -140,11 +173,12 @@ function App() {
     >
       <CurrentMoviesContext.Provider
         value={{
-          //moviesList,
           saveMovie,
-          //moviesSearchResult,
-          //isMoviesFilterEnabled,
-          //setIsMoviesFilterEnabled,
+          deleteMovie,
+          savedMovies, 
+          setSavedMovies,
+          moviesSearchResult,
+          setMoviesSearchResult
         }}
       >
         <Routes>

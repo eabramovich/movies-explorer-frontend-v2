@@ -24,6 +24,10 @@ function Profile() {
     setIsLoggedIn(false);
     localStorage.removeItem("moviesSearchResult");
     localStorage.removeItem("moviesSearchText");
+    localStorage.removeItem("isMoviesFilterEnabled")
+    localStorage.removeItem("savedMoviesSearchResult");
+    localStorage.removeItem("savedMoviesSearchText");
+    localStorage.removeItem("isSavedMoviesFilterEnabled");
     navigate("/");
   };
 

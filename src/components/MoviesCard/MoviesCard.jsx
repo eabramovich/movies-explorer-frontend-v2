@@ -5,20 +5,40 @@ import "./MoviesCard.css";
 
 function MoviesCard({ movie }) {
   const location = useLocation();
-  const { image, nameRU, duration, isSaved } = movie;
-  const { isSavedMovie, setIsSavedMovie } = React.useState(false)
-  console.log(movie);
-  // const imageUrl = `https://api.nomoreparties.co${image.url}`;
-  // const thumbnailUrl = `https://api.nomoreparties.co${image.formats.thumbnail.url}`;
+  const { savedMovies, saveMovie, deleteMovie } = React.useContext(CurrentMoviesContext);
+  const { image, nameRU, duration } = movie;
+  //console.log(movie);
+ // console.log(savedMovies);
+  const [ isSavedMovie, setIsSavedMovie ] = React.useState(savedMovies.some(savMmovie => savMmovie.movieId === movie.movieId));
+ // console.log(isSavedMovie);
 
-  const { saveMovie } = React.useContext(CurrentMoviesContext);
+  React.useEffect(() => {
+    //console.log("isSavedMovie", isSavedMovie);
+    //console.log(movie);
+    const isMovieSaved = savedMovies.some(savMmovie => savMmovie.movieId === movie.movieId);
+    setIsSavedMovie(isMovieSaved);
+  }, [isSavedMovie, savedMovies, setIsSavedMovie, movie]);
 
   const handleActionIconClick = () => {
-    // movie.image = imageUrl;
-    // movie.movieId = movie.id;
-    // movie.thumbnail = thumbnailUrl;
     console.log(movie);
-    saveMovie(movie);
+    console.log(isSavedMovie);
+    if(isSavedMovie) {
+      deleteMovie(movie)
+      .then((res) => {
+        setIsSavedMovie(!isSavedMovie)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    } else {
+      saveMovie(movie)
+      .then((res) => {
+        setIsSavedMovie(!isSavedMovie);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
   };
 
   return (
