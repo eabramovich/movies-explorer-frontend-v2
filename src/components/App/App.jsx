@@ -14,20 +14,16 @@ import AboutProject from "../AboutProject/AboutProject";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 import mainApi from "../../utils/MainApi";
-import moviesApi from "../../utils/MoviesApi";
-import MoviesList from "../../utils/MoviesList";
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
-  // const [cards, setCards] = React.useState([]);
   const [moviesSearchResult, setMoviesSearchResult] = React.useState(() => {
     const moviesSearchResult = localStorage.getItem("moviesSearchResult");
     return moviesSearchResult ? JSON.parse(moviesSearchResult) : [];
   });
   const [savedMovies, setSavedMovies] = React.useState([]);
-  //const moviesList = new MoviesList([]);
 
   const navigate = useNavigate();
 
@@ -46,40 +42,13 @@ function App() {
             name: res.data.name,
             email: res.data.email,
           });
+          navigate("/movies", { replace: true });
         })
         .catch((err) => {
           console.log(err);
         });
-
-      // console.log(localStorage.getItem("moviesSearchResult"));
-      // const movies = JSON.parse(localStorage.getItem("moviesSearchResult"));
-      // //const movies = localStorage.getItem("moviesSearchResult");
-      // const moviesSearchText = localStorage.getItem("moviesSearchText");
-      // console.log(movies);
-      // if (movies) {
-      //   setMoviesSearchResult(movies);
-      //   setMoviesSearchText(moviesSearchText);
-      // }
     }
   }, []);
-
-  // React.useEffect(() => {
-  //   console.log("set cards");
-  //   if(isLoggedIn) {
-  //     const token = localStorage.getItem("token");
-  //     Promise.all([moviesApi.getFilms(), mainApi.getSavedMovies(token)])
-  //     .then((movies, savedMovies) => {
-  //       //console.log(res);
-  //       // setCards(movies);
-  //       // moviesList.setInitialCards(movies);
-  //       setSavedMovies(savedMovies);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   }
-    
-  // }, [isLoggedIn]);
 
   React.useEffect(() => {
     console.log("set saved cards");
@@ -156,7 +125,8 @@ function App() {
   const deleteMovie = (movie) => {
     const token = localStorage.getItem("token");
     console.log(savedMovies);
-    const movieId = savedMovies.find((savedMovie) => savedMovie.movieId !== movie.movieId)._id;
+    const movieId = savedMovies.find((savedMovie) => savedMovie.movieId === movie.movieId)._id;
+    console.log(movieId);
     return mainApi.removeMovie(movieId, token)
     .then((res) => {
       console.log(res);
@@ -188,8 +158,6 @@ function App() {
             element={
               <ProtectedRouteElement
                 element={Movies}
-                //cards={moviesSearchResult}
-                //onSearch={onMoviesSearch}
               />
             }
           />

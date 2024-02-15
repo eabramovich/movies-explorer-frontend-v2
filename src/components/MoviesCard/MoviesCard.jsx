@@ -1,20 +1,15 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 import "./MoviesCard.css";
 
 function MoviesCard({ movie }) {
   const location = useLocation();
   const { savedMovies, saveMovie, deleteMovie } = React.useContext(CurrentMoviesContext);
-  const { image, nameRU, duration } = movie;
-  //console.log(movie);
- // console.log(savedMovies);
+  const { image, nameRU, duration, trailerLink } = movie;
   const [ isSavedMovie, setIsSavedMovie ] = React.useState(savedMovies.some(savMmovie => savMmovie.movieId === movie.movieId));
- // console.log(isSavedMovie);
 
   React.useEffect(() => {
-    //console.log("isSavedMovie", isSavedMovie);
-    //console.log(movie);
     const isMovieSaved = savedMovies.some(savMmovie => savMmovie.movieId === movie.movieId);
     setIsSavedMovie(isMovieSaved);
   }, [isSavedMovie, savedMovies, setIsSavedMovie, movie]);
@@ -41,10 +36,16 @@ function MoviesCard({ movie }) {
     }
   };
 
+  const transformDuration = (duration) => {
+    const hour = Math.floor(duration / 60);
+    const minute = duration % 60;
+    return hour > 0 ? `${hour}ч ${minute}м` : `${minute}м`;
+  }
+
   return (
     <li className="movies-card">
       <div className="movies-card__image-wrapper">
-        <img className="movies-card__image" src={image} alt={nameRU} />
+        <Link to={trailerLink} target="_blank"><img className="movies-card__image" src={image} alt={nameRU} /></Link>
       </div>
 
       <div className="movies-card__info">
@@ -69,7 +70,7 @@ function MoviesCard({ movie }) {
             onClick={handleActionIconClick}
           ></button>
         </div>
-        <span className="movies-card__duration">{duration}</span>
+        <span className="movies-card__duration">{transformDuration(duration)}</span>
       </div>
     </li>
   );

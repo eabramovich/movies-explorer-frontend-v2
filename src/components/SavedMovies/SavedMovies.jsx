@@ -12,80 +12,61 @@ import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 
 function SavedMovies({ cards }) {
   const { isLoggedIn } = React.useContext(CurrentUserContext);
-  const { savedMovies, setSavedMovies } = React.useContext(CurrentMoviesContext);
-  //const [savedMovies, setSavedMovies] = React.useState([]);
-  const [isSavedMoviesLoading, setIsMoviesLoading] = React.useState(false);
+  const { savedMovies, setSavedMovies } =
+    React.useContext(CurrentMoviesContext);
+  const [isSavedMoviesLoading, setIsMoviesLoading] = React.useState(true);
   const [savedMoviesSearchResult, setSavedMoviesSearchResult] = React.useState(
-    () => {
-      const savedMoviesSearchResult = localStorage.getItem(
-        "savedMoviesSearchResult"
-      );
-      return savedMoviesSearchResult
-        ? JSON.parse(savedMoviesSearchResult)
-        : savedMovies;
-    }
+    []
   );
-  const [savedMoviesSearchText, setSavedMoviesSearchText] = React.useState(
-    () => {
-      const savedMoviesSearchText = localStorage.getItem(
-        "savedMoviesSearchText"
-      );
-      return savedMoviesSearchText ? savedMoviesSearchText : "";
-    }
-  );
+  const [savedMoviesSearchText, setSavedMoviesSearchText] = React.useState("");
   const [isSavedMoviesFilterEnabled, setIsSavedMoviesFilterEnabled] =
-    React.useState(() => {
-      const isSavedMoviesFilterEnabled = JSON.parse(
-        localStorage.getItem("isSavedMoviesFilterEnabled")
-      );
-      return isSavedMoviesFilterEnabled ? isSavedMoviesFilterEnabled : false;
-    });
+    React.useState(false);
 
   const savedMoviesList = new MoviesList(savedMoviesSearchResult);
 
   React.useEffect(() => {
-    console.log("set saved cards");
     const token = localStorage.getItem("token");
-    mainApi
-      .getSavedMovies(token)
-      .then((savedMovies) => {
-        console.log(savedMovies);
-        // setCards(movies);
-        // moviesList.setInitialCards(movies);
-        setSavedMovies(savedMovies.data);
-        if(!savedMoviesSearchText) {
+    if (!savedMoviesSearchText) {
+      mainApi
+        .getSavedMovies(token)
+        .then((savedMovies) => {
+          setSavedMovies(savedMovies.data);
           setSavedMoviesSearchResult(savedMovies.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [savedMoviesSearchText, setSavedMovies]);
+          setIsSavedMoviesFilterEnabled(false);
+          setIsMoviesLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [setSavedMovies, savedMoviesSearchText]);
 
   const onSavedMoviesSearch = (resultText, isFilterEnabled) => {
-    //savedMoviesList.setInitialCards(savedMovies);
     let result = savedMoviesList.filterMoviesListByName(
       resultText,
       isFilterEnabled
     );
     setSavedMoviesSearchResult(result);
-    localStorage.setItem("savedMoviesSearchText", savedMoviesSearchText);
-    localStorage.setItem("savedMoviesSearchResult", JSON.stringify(result));
   };
+
+  React.useEffect(() => {
+    savedMoviesList.setInitialCards(savedMovies);
+    if (!savedMoviesSearchText) {
+      let result = savedMoviesList.filterMoviesListByDuration(
+        isSavedMoviesFilterEnabled
+      );
+      setSavedMoviesSearchResult(result);
+    } else {
+      let result = savedMoviesList.filterMoviesListByName(
+        savedMoviesSearchText,
+        isSavedMoviesFilterEnabled
+      );
+      setSavedMoviesSearchResult(result);
+    }
+  }, [savedMovies, isSavedMoviesFilterEnabled]);
 
   const onFilterShortMovies = (e) => {
     setIsSavedMoviesFilterEnabled(e.target.checked);
-    localStorage.setItem("isSavedMoviesFilterEnabled", JSON.stringify(e.target.checked));
-    if(savedMoviesSearchResult) {
-     
-      //if(!savedMoviesSearchText) {
-        savedMoviesList.setInitialCards(savedMovies);
-        console.log(savedMoviesList);
-      //}
-      let result = savedMoviesList.filterMoviesListByName(savedMoviesSearchText, e.target.checked);
-      setSavedMoviesSearchResult(result);
-      localStorage.setItem("savedMoviesSearchResult", JSON.stringify(result));
-    }
   };
 
   return (
@@ -104,7 +85,7 @@ function SavedMovies({ cards }) {
           <Preloader />
         ) : (
           <>
-            <MoviesCardList movies={savedMovies}></MoviesCardList>
+            <MoviesCardList movies={savedMoviesSearchResult}></MoviesCardList>
           </>
         )}
       </main>
