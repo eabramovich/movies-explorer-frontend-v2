@@ -31,7 +31,8 @@ function Movies() {
     }
   );
   const [moviesErrorMessage, setMoviesErrorMessage] = React.useState("");
-  //const [emptySearchResultText, setEmptySearchResultText] = React.useState("");
+  const [moviesToRender, setMoviesToRender] = React.useState([]);
+  const [isButtonMoreNeeded, setIsButtonMoreNeeded] = React.useState(false);
 
   const moviesList = new MoviesList(movies);
 
@@ -58,6 +59,25 @@ function Movies() {
   }, []);
 
   React.useEffect(() => {
+    // Обработчик изменения размера экрана
+    const handleResize = () => {
+      const movies = getMoviesToRender();
+      setMoviesToRender(movies);
+      setIsButtonMoreNeeded(isShowMoreRender(moviesSearchResult, movies));
+    };
+
+    // Добавляем слушатель события изменения размера экрана
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    // Убираем слушатель события при размонтировании компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [moviesSearchResult]); // Пустой массив зависимостей для вызова useEffect только после монтирования компонента
+
+  React.useEffect(() => {
     if (!moviesSearchText) {
       setMoviesSearchText("");
       setMoviesSearchResult([]);
@@ -67,6 +87,30 @@ function Movies() {
       localStorage.setItem("moviesSearchResult", JSON.stringify([]));
     }
   }, [moviesSearchText, setMoviesSearchResult]);
+
+  // Функция для определения количества карточек в зависимости от ширины экрана
+  function getCardCount() {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1280) {
+      return 16;
+    } else if (screenWidth >= 930) {
+      return 12;
+    } else if (screenWidth >= 630) {
+      return 8;
+    } else {
+      return 5;
+    }
+  }
+
+  function getMoviesToRender() {
+    const cardCount = getCardCount();
+    if (moviesSearchResult.length >= cardCount) {
+      return moviesSearchResult.slice(0, cardCount);
+    } else {
+      return moviesSearchResult;
+    }
+  }
 
   const onMoviesSearch = (resultText, isFilterEnabled) => {
     setIsMoviesLoading(true);
@@ -94,6 +138,32 @@ function Movies() {
     }
   };
 
+  const isShowMoreRender = (moviesSearchResult, movies) => {
+      if (moviesSearchResult.length > movies.length) {
+        return true;
+      } else {
+        return false;
+      }
+  }
+
+  const showMoreHandler = () => {
+    console.log("!!!!!!!!!!!!");
+    let cardCount = 0;
+    const screenWidth = window.innerWidth;
+    if (screenWidth >= 1280) {
+      cardCount = 4;
+    } else if (screenWidth >= 930) {
+      cardCount = 3;
+    } else {
+      cardCount = 2;
+    }
+    const countRenderMovies = moviesToRender.length;
+    const movies = [...moviesToRender, ...moviesSearchResult.slice(countRenderMovies, (countRenderMovies + cardCount))]
+    setMoviesToRender(movies);
+    console.log(isShowMoreRender(moviesSearchResult, movies));
+    setIsButtonMoreNeeded(isShowMoreRender(moviesSearchResult, movies));
+  };
+
   return (
     <>
       <Header isLoggedIn={isLoggedIn} />
@@ -112,8 +182,8 @@ function Movies() {
           <p className="movies__message">{moviesErrorMessage}</p>
         ) : moviesSearchResult.length > 0 ? (
           <>
-            <MoviesCardList movies={moviesSearchResult}></MoviesCardList>
-            <MoreButton />
+            <MoviesCardList movies={moviesToRender}></MoviesCardList>
+            {isButtonMoreNeeded ? <MoreButton onClick={showMoreHandler} /> : ""}
           </>
         ) : (
           <p className="movies__message">Ничего не найдено</p>
