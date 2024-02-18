@@ -42,6 +42,8 @@ function SavedMovies({ cards }) {
   }, [setSavedMovies, savedMoviesSearchText]);
 
   const onSavedMoviesSearch = (resultText, isFilterEnabled) => {
+    savedMoviesList.setInitialCards(savedMovies);
+    console.log(savedMovies);
     let result = savedMoviesList.filterMoviesListByName(
       resultText,
       isFilterEnabled
@@ -57,6 +59,7 @@ function SavedMovies({ cards }) {
       );
       setSavedMoviesSearchResult(result);
     } else {
+      console.log(savedMovies);
       let result = savedMoviesList.filterMoviesListByName(
         savedMoviesSearchText,
         isSavedMoviesFilterEnabled
@@ -83,10 +86,12 @@ function SavedMovies({ cards }) {
         />
         {isSavedMoviesLoading ? (
           <Preloader />
-        ) : (
+        ) : savedMoviesSearchResult.length > 0 ? (
           <>
             <MoviesCardList movies={savedMoviesSearchResult}></MoviesCardList>
           </>
+        ) : (
+          <p className="movies__message">Ничего не найдено</p>
         )}
       </main>
       <Footer />
