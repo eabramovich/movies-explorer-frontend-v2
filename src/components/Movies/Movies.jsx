@@ -15,8 +15,12 @@ function Movies() {
   const { isLoggedIn } = React.useContext(CurrentUserContext);
   const { moviesSearchResult, setMoviesSearchResult } =
     React.useContext(CurrentMoviesContext);
-  const [movies, setMovies] = React.useState([]);
-  const [isMoviesLoading, setIsMoviesLoading] = React.useState(true);
+  //const [movies, setMovies] = React.useState([]);
+  const [movies, setMovies] = React.useState(() => {
+    const movies = localStorage.getItem("movies");
+    return movies ? JSON.parse(movies) : [];
+  });
+  const [isMoviesLoading, setIsMoviesLoading] = React.useState(false);
 
   const [moviesSearchText, setMoviesSearchText] = React.useState(() => {
     const moviesSearchText = localStorage.getItem("moviesSearchText");
@@ -31,32 +35,11 @@ function Movies() {
     }
   );
   const [moviesErrorMessage, setMoviesErrorMessage] = React.useState("");
+  const [isSearchResultEmpty, setIsSearchResultEmpty] = React.useState(false);
   const [moviesToRender, setMoviesToRender] = React.useState([]);
   const [isButtonMoreNeeded, setIsButtonMoreNeeded] = React.useState(false);
 
   const moviesList = new MoviesList(movies);
-
-  React.useEffect(() => {
-    moviesApi
-      .getFilms()
-      .then((movies) => {
-        const result = movies.map((movie) => {
-          movie.thumbnail = `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`;
-          movie.image = `https://api.nomoreparties.co${movie.image.url}`;
-          movie.movieId = movie.id;
-          return movie;
-        });
-        setMovies(result);
-        setIsMoviesLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setMoviesErrorMessage(
-          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз."
-        );
-        setIsMoviesLoading(false);
-      });
-  }, []);
 
   React.useEffect(() => {
     // Обработчик изменения размера экрана
@@ -112,15 +95,54 @@ function Movies() {
     }
   }
 
+  const getAllMovies = () => {
+   return moviesApi.getFilms()
+      .then((movies) => {
+        const result = movies.map((movie) => {
+          movie.thumbnail = `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`;
+          movie.image = `https://api.nomoreparties.co${movie.image.url}`;
+          movie.movieId = movie.id;
+          return movie;
+        });
+        console.log(result);
+        return Promise.resolve(result);
+      })
+      .catch((err) => {
+        console.log(err);
+        return Promise.reject(err);
+      });
+  }
+
   const onMoviesSearch = (resultText, isFilterEnabled) => {
     setIsMoviesLoading(true);
-    moviesList.setInitialCards(movies);
-    let result = moviesList.filterMoviesListByName(resultText, isFilterEnabled);
-    setMoviesSearchResult(result);
-    setIsMoviesLoading(false);
-    localStorage.setItem("moviesSearchText", moviesSearchText);
-    localStorage.setItem("moviesSearchResult", JSON.stringify(result));
+    if(movies.length === 0) {
+      getAllMovies()
+      .then((result) => {
+        console.log(result)
+        setMovies(result);
+        moviesList.setInitialCards(result);
+        localStorage.setItem("movies", JSON.stringify(result));
+        handleSearch(resultText, isFilterEnabled);
+      })
+      .catch((err) => {
+        setMoviesErrorMessage(
+          "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз."
+        );
+        setIsMoviesLoading(false);
+      })
+    } else {
+      handleSearch(resultText, isFilterEnabled);
+    }
   };
+
+  const handleSearch = (resultText, isFilterEnabled) => {
+    const searchResult = moviesList.filterMoviesListByName(resultText, isFilterEnabled);
+    setMoviesSearchResult(searchResult);
+    setIsSearchResultEmpty((searchResult.length > 0 && resultText.length > 0) ? false : true);
+    setIsMoviesLoading(false);
+    localStorage.setItem("moviesSearchText", resultText);
+    localStorage.setItem("moviesSearchResult", JSON.stringify(searchResult));
+  }
 
   const onFilterShortMovies = (e) => {
     setIsMoviesFilterEnabled(e.target.checked);
@@ -129,25 +151,24 @@ function Movies() {
       JSON.stringify(e.target.checked)
     );
     if (moviesSearchResult) {
-      let result = moviesList.filterMoviesListByName(
+      const searchResult = moviesList.filterMoviesListByName(
         moviesSearchText,
         e.target.checked
       );
-      setMoviesSearchResult(result);
-      localStorage.setItem("moviesSearchResult", JSON.stringify(result));
+      setMoviesSearchResult(searchResult);
+      localStorage.setItem("moviesSearchResult", JSON.stringify(searchResult));
     }
   };
 
   const isShowMoreRender = (moviesSearchResult, movies) => {
-      if (moviesSearchResult.length > movies.length) {
-        return true;
-      } else {
-        return false;
-      }
-  }
+    if (moviesSearchResult.length > movies.length) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const showMoreHandler = () => {
-    console.log("!!!!!!!!!!!!");
     let cardCount = 0;
     const screenWidth = window.innerWidth;
     if (screenWidth >= 1280) {
@@ -158,9 +179,14 @@ function Movies() {
       cardCount = 2;
     }
     const countRenderMovies = moviesToRender.length;
-    const movies = [...moviesToRender, ...moviesSearchResult.slice(countRenderMovies, (countRenderMovies + cardCount))]
+    const movies = [
+      ...moviesToRender,
+      ...moviesSearchResult.slice(
+        countRenderMovies,
+        countRenderMovies + cardCount
+      ),
+    ];
     setMoviesToRender(movies);
-    console.log(isShowMoreRender(moviesSearchResult, movies));
     setIsButtonMoreNeeded(isShowMoreRender(moviesSearchResult, movies));
   };
 
@@ -185,8 +211,10 @@ function Movies() {
             <MoviesCardList movies={moviesToRender}></MoviesCardList>
             {isButtonMoreNeeded ? <MoreButton onClick={showMoreHandler} /> : ""}
           </>
-        ) : (
+        ) : isSearchResultEmpty ? (
           <p className="movies__message">Ничего не найдено</p>
+        ) : (
+          ""
         )}
       </main>
       <Footer />

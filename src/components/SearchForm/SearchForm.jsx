@@ -1,22 +1,24 @@
 import React from "react";
 import "./SearchForm.css";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import { message } from "../../utils/constants";
 
 function SearchForm({ onSearch, searchText, setSearchText, isFilterEnabled, setFilterEnabled, handleCheckboxChange}) {
-  const [isValid, setIsValid] = React.useState(false);
+  //const [isValid, setIsValid] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
   const formRef = React.useRef();
   const submitButtonRef = React.useRef();
   const searchInput = React.useRef();
 
-  React.useEffect(() => {
-    if (formRef.current.checkValidity()) {
-      setIsValid(true);
-      submitButtonRef.current.disabled = false;
-    } else {
-      setIsValid(false);
-      submitButtonRef.current.disabled = true;
-    }
-  }, [searchText]);
+  // React.useEffect(() => {
+  //   if (formRef.current.checkValidity()) {
+  //     setIsValid(true);
+  //     submitButtonRef.current.disabled = false;
+  //   } else {
+  //     setIsValid(false);
+  //     submitButtonRef.current.disabled = true;
+  //   }
+  // }, [searchText]);
 
   const onSearchTextChange = (e) => {
     setSearchText(e.target.value);
@@ -27,6 +29,9 @@ function SearchForm({ onSearch, searchText, setSearchText, isFilterEnabled, setF
     const resultText = searchText.trim();
     if (resultText.length > 0) {
       onSearch(resultText, isFilterEnabled);
+      setErrorMessage("");
+    } else {
+      setErrorMessage(message.validationMessage.emptySearchText);
     }
   };
 
@@ -50,12 +55,11 @@ function SearchForm({ onSearch, searchText, setSearchText, isFilterEnabled, setF
         />
         <input
           ref={submitButtonRef}
-          className={`search-form__submit ${
-            isValid ? "search-form__submit_active" : ""
-          }`}
+          className="search-form__submit"
           type="submit"
           value="Найти"
         />
+        <span className="search-form__error-message">{errorMessage}</span>
         <FilterCheckbox
           isFilterEnabled={isFilterEnabled}
           setIsFilterEnabled={setFilterEnabled}

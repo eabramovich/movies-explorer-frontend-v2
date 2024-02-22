@@ -3,8 +3,7 @@ import "./AuthForm.css";
 import { useFormWithValidation } from "../../hooks/useFormWithValidation";
 
 function AuthForm({ name, buttonText, onSubmit }) {
-  const { values, errors, isValid, handleChange, resetForm } =
-    useFormWithValidation();
+  const { values, errors, isValid, handleChange } = useFormWithValidation();
   const submitButtonRef = React.useRef();
   const [errorMessage, setErrorMessage] = React.useState(null);
   //console.log(values);

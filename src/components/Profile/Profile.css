@@ -72,6 +72,22 @@
     opacity: 1;
 }
 
+.profile__submit-message {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 7px;
+    min-height: 18px;
+}
+
+.profile__message_type_error {
+    color: red;
+}
+
+.profile__message_type_successfull {
+    color: green;
+}
+
 .profile__form-button {
     border: none;
     background: inherit;

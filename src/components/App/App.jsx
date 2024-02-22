@@ -28,15 +28,11 @@ function App() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    console.log("123");
     const token = localStorage.getItem("token");
-    console.log(token);
     if (token) {
-      console.log("345");
       mainApi
         .getUserInfo(token)
         .then((res) => {
-          console.log(res);
           setIsLoggedIn(true);
           setCurrentUser({
             name: res.data.name,
@@ -48,10 +44,9 @@ function App() {
           console.log(err);
         });
     }
-  }, []);
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
-    console.log("set saved cards");
     const token = localStorage.getItem("token");
     mainApi
       .getSavedMovies(token)
@@ -68,14 +63,11 @@ function App() {
       .signin({ email, password })
       .then((res) => {
         setIsLoggedIn(true);
-        console.log(res);
-        console.log(res.token);
         localStorage.setItem("token", res.token);
         navigate("/movies", { replace: true });
         return res;
       })
       .catch((err) => {
-        console.log(err);
         let jsonError = {};
         try {
           jsonError = JSON.parse(err.message);
@@ -92,9 +84,7 @@ function App() {
     return mainApi
       .signup({ name, email, password })
       .then((res) => {
-        console.log(res);
         handleLogin({ email, password });
-        //return res;
       })
       .catch((err) => {
         let jsonError = {};
@@ -113,9 +103,7 @@ function App() {
     const token = localStorage.getItem("token");
     return mainApi.addNewMovie(movie, token)
     .then((res) => {
-      console.log(res);
       setSavedMovies([...savedMovies, res.data]);
-      console.log(savedMovies);
     })
     .catch((err) => {
       console.log(err);
@@ -124,12 +112,9 @@ function App() {
 
   const deleteMovie = (movie) => {
     const token = localStorage.getItem("token");
-    console.log(savedMovies);
     const movieId = savedMovies.find((savedMovie) => savedMovie.movieId === movie.movieId)._id;
-    console.log(movieId);
     return mainApi.removeMovie(movieId, token)
     .then((res) => {
-      console.log(res);
       setSavedMovies(savedMovies.filter((savedMovie) => savedMovie.movieId !== movie.movieId));
     })
     .catch((err) => {

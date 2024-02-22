@@ -26,20 +26,24 @@ function SavedMovies({ cards }) {
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!savedMoviesSearchText) {
-      mainApi
-        .getSavedMovies(token)
-        .then((savedMovies) => {
-          setSavedMovies(savedMovies.data);
-          setSavedMoviesSearchResult(savedMovies.data);
-          setIsSavedMoviesFilterEnabled(false);
-          setIsMoviesLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    mainApi
+      .getSavedMovies(token)
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies.data);
+        setSavedMoviesSearchResult(savedMovies.data);
+        setIsSavedMoviesFilterEnabled(false);
+        setIsMoviesLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [setSavedMovies]);
+
+  React.useEffect(() => {
+    if (savedMoviesSearchText.length === 0) {
+      setSavedMoviesSearchResult(savedMovies);
     }
-  }, [setSavedMovies, savedMoviesSearchText]);
+  }, [savedMoviesSearchText, savedMovies]);
 
   const onSavedMoviesSearch = (resultText, isFilterEnabled) => {
     savedMoviesList.setInitialCards(savedMovies);
@@ -51,25 +55,21 @@ function SavedMovies({ cards }) {
     setSavedMoviesSearchResult(result);
   };
 
-  React.useEffect(() => {
-    savedMoviesList.setInitialCards(savedMovies);
-    if (!savedMoviesSearchText) {
-      let result = savedMoviesList.filterMoviesListByDuration(
-        isSavedMoviesFilterEnabled
-      );
-      setSavedMoviesSearchResult(result);
-    } else {
-      console.log(savedMovies);
-      let result = savedMoviesList.filterMoviesListByName(
-        savedMoviesSearchText,
-        isSavedMoviesFilterEnabled
-      );
-      setSavedMoviesSearchResult(result);
-    }
-  }, [savedMovies, isSavedMoviesFilterEnabled]);
-
   const onFilterShortMovies = (e) => {
     setIsSavedMoviesFilterEnabled(e.target.checked);
+    savedMoviesList.setInitialCards(savedMovies);
+    if (!savedMoviesSearchText) {
+      setSavedMoviesSearchResult(
+        savedMoviesList.filterMoviesListByDuration(e.target.checked)
+      );
+    } else {
+      setSavedMoviesSearchResult(
+        savedMoviesList.filterMoviesListByName(
+          savedMoviesSearchText,
+          e.target.checked
+        )
+      );
+    }
   };
 
   return (
@@ -90,8 +90,10 @@ function SavedMovies({ cards }) {
           <>
             <MoviesCardList movies={savedMoviesSearchResult}></MoviesCardList>
           </>
-        ) : (
+        ) : savedMovies.length > 0 ? (
           <p className="movies__message">Ничего не найдено</p>
+        ) : (
+          ""
         )}
       </main>
       <Footer />

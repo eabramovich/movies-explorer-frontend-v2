@@ -18,7 +18,7 @@
     flex-grow: 1;
     display: flex;
     flex-flow: column;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .page-not-found__title {
@@ -43,7 +43,7 @@
     text-decoration: none;
     flex-grow: 1;
     display: flex;
-    align-items: end;
+    align-items: flex-end;
 }
 
 @media screen and (max-width: 475px) {

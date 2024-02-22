@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import Header from "../Header/Header";
 import "./Profile.css";
-import { useFormWithValidation } from "../../hooks/useFormWithValidation";
+import mainApi from "../../utils/MainApi";
+import { emailRegex, message } from "../../utils/constants";
 
 function Profile() {
-  const { currentUser, isLoggedIn, setIsLoggedIn } =
+  const { currentUser, setCurrentUser, isLoggedIn, setIsLoggedIn } =
     React.useContext(CurrentUserContext);
   const saveButtonRef = React.useRef();
   const [values, setValues] = React.useState({
@@ -17,10 +18,11 @@ function Profile() {
   const [isValid, setIsValid] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = React.useState(true);
+  const [isUserInfoUpdated, setIsUserInfoUpdated] = React.useState(true);
+  const [submitMessage, setSubmitMessage] = React.useState("");
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    console.log(isValid);
     if (
       isValid &&
       (currentUser.name !== values.username ||
@@ -40,6 +42,8 @@ function Profile() {
 
   const handleEditClick = (e) => {
     e.preventDefault();
+    setIsSaveButtonDisabled(true);
+    setSubmitMessage("");
     setIsEditing(true);
   };
 
@@ -47,25 +51,57 @@ function Profile() {
     const target = event.target;
     const name = target.name;
     const value = target.value.trim();
+    if (name === "email") {
+      const isValidEmail = emailRegex.test(value);
+      const errorMessage =
+        !isValidEmail && !target.validationMessage
+          ? message.validationMessage.incorrectEmail
+          : target.validationMessage;
+      setErrors({ ...errors, [name]: errorMessage });
+    } else {
+      setErrors({ ...errors, [name]: target.validationMessage });
+    }
     setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: target.validationMessage });
     setIsValid(target.closest("form").checkValidity());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setIsEditing(false);
+    const token = localStorage.getItem("token");
+    const resultBody = {};
+    if (currentUser.name !== values.username) {
+      resultBody.name = values.username;
+    }
+    if (currentUser.email !== values.email) {
+      resultBody.email = values.email;
+    }
+
+    mainApi
+      .updateUserInfo(resultBody, token)
+      .then((res) => {
+        setIsUserInfoUpdated(true);
+        setSubmitMessage("Данные профиля обновлены");
+        setIsEditing(false);
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
+        });
+      })
+      .catch((err) => {
+        const error = JSON.parse(err.message);
+        setIsUserInfoUpdated(false);
+        setSubmitMessage(error.message);
+      });
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false);
+    localStorage.removeItem("movies");
     localStorage.removeItem("moviesSearchResult");
     localStorage.removeItem("moviesSearchText");
     localStorage.removeItem("isMoviesFilterEnabled");
-    localStorage.removeItem("savedMoviesSearchResult");
-    localStorage.removeItem("savedMoviesSearchText");
-    localStorage.removeItem("isSavedMoviesFilterEnabled");
+    setIsLoggedIn(false);
+    setCurrentUser({});
     navigate("/");
   };
 
@@ -116,6 +152,7 @@ function Profile() {
             <div className="profile__input-wrapper">
               <input
                 required
+                autoComplete="off"
                 type="email"
                 className={`profile__form-input ${
                   isEditing
@@ -139,6 +176,15 @@ function Profile() {
               </span>
             </div>
           </div>
+          <span
+            className={`profile__submit-message ${
+              !isUserInfoUpdated
+                ? "profile__message_type_error"
+                : "profile__message_type_successfull"
+            }`}
+          >
+            {submitMessage}
+          </span>
           {isEditing ? (
             <button
               type="submit"
@@ -146,6 +192,7 @@ function Profile() {
               ref={saveButtonRef}
               onClick={handleSubmit}
               disabled={isSaveButtonDisabled}
+              onSubmit={handleSubmit}
             >
               Сохранить
             </button>

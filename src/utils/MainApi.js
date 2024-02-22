@@ -35,6 +35,17 @@ class MainApi extends Api {
     });
   }
 
+  updateUserInfo({ name, email }, token) {
+    return super._request("/users/me", {
+      method: "PATCH",
+      headers: { ...this._headers, Authorization: `Bearer ${token}` },
+      body: JSON.stringify({
+        name,
+        email
+      }),
+    });
+  }
+
   addNewMovie({
     nameRU,
     nameEN,
@@ -84,8 +95,8 @@ class MainApi extends Api {
 }
 
 const mainApi = new MainApi({
-  //baseUrl: 'https://api.movies.jane.nomoredomainsmonster.ru',
-  baseUrl: "http://localhost:3000",
+  baseUrl: 'https://api.movies.jane.nomoredomainsmonster.ru',
+  //baseUrl: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json",
   },
