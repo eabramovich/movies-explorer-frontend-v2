@@ -4,14 +4,15 @@ import "./Register.css";
 import Logo from "../Logo/Logo";
 import AuthForm from "../AuthForm/AuthForm";
 
-function Register() {
+function Register({ onRegister }) {
+
   return (
       <main className="auth-content">
         <div className="auth-content__header">
           <Logo />
           <h1 className="welcome-title">Добро пожаловать!</h1>
         </div>
-        <AuthForm name="register" buttonText="Зарегистрироваться" />
+        <AuthForm name="register" buttonText="Зарегистрироваться" onSubmit={onRegister}/>
         <div className="auth-content__login-register">
         <p className="auth-content__login-register-text">Уже зарегистрированы?</p>
         <Link to="/signin" className="auth-content__login-link">

@@ -30,6 +30,13 @@
     padding-bottom: 19px;
 }
 
+.search-form__error-message{
+    color: red;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+}
+
 .search-form__submit {
     background-color: #3456F3;
     color: #FFF;
@@ -45,7 +52,7 @@
     top: 2px
 }
 
-.search-form__submit:hover {
+.search-form__submit_active:hover {
     opacity: 0.8;
     cursor: pointer;
 }

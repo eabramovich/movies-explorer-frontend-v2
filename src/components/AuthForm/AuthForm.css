@@ -58,12 +58,26 @@
     opacity: 0;
 }
 
+.auth-form__error-message {
+    color: red;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 7px;
+    min-height: 18px;
+    opacity: 0;
+}
+
+.auth-form__error-message_active {
+    opacity: 1;
+}
+
 .auth-form__item-error_active {
     opacity: 1;
 }
 
 .auth-form__button {
-    background: #3456F3;
+    background: #E8E8E8;
     color: #FFF;
     font-size: 14px;
     font-weight: 500;
@@ -71,10 +85,13 @@
     width: 100%;
     height: 45px;
     border: none;
-    margin-top: 125px;
 }
 
-.auth-form__button:hover {
+.auth-form__button_active {
+    background-color: #3456F3;
+}
+
+.auth-form__button_active:hover {
     opacity: 0.8;
     cursor: pointer;
 }
