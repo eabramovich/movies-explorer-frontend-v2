@@ -45,18 +45,6 @@ function App() {
         console.log(err);
       });
     }
-  }, []);
-
-  React.useEffect(() => {
-    const token = localStorage.getItem("token");
-    mainApi
-      .getSavedMovies(token)
-      .then((savedMovies) => {
-        setSavedMovies(savedMovies.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, [isLoggedIn]);
 
   const handleLogin = ({ email, password }) => {

@@ -15,8 +15,6 @@ function MoviesCard({ movie }) {
   }, [isSavedMovie, savedMovies, setIsSavedMovie, movie]);
 
   const handleActionIconClick = () => {
-    console.log(movie);
-    console.log(isSavedMovie);
     if(isSavedMovie) {
       deleteMovie(movie)
       .then((res) => {
