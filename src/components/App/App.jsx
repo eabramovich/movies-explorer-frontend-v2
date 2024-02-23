@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import ProtectedRouteElement from "./../ProtectedRoute/ProtectedRoute";
 import "../App/App.css";
 import "../../contexts/CurrentUserContext";
@@ -15,7 +15,6 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { CurrentMoviesContext } from "../../contexts/CurrentMoviesContext";
 import mainApi from "../../utils/MainApi";
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
@@ -26,25 +25,27 @@ function App() {
   const [savedMovies, setSavedMovies] = React.useState([]);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
+    const path = location.pathname;
     if (token) {
       mainApi
-        .getUserInfo(token)
-        .then((res) => {
-          setIsLoggedIn(true);
-          setCurrentUser({
-            name: res.data.name,
-            email: res.data.email,
-          });
-          navigate("/movies", { replace: true });
-        })
-        .catch((err) => {
-          console.log(err);
+      .getUserInfo(token)
+      .then((res) => {
+        setIsLoggedIn(true);
+        setCurrentUser({
+          name: res.data.name,
+          email: res.data.email,
         });
+        navigate(path, { replace: true });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
-  }, [isLoggedIn]);
+  }, []);
 
   React.useEffect(() => {
     const token = localStorage.getItem("token");
@@ -101,26 +102,34 @@ function App() {
 
   const saveMovie = (movie) => {
     const token = localStorage.getItem("token");
-    return mainApi.addNewMovie(movie, token)
-    .then((res) => {
-      setSavedMovies([...savedMovies, res.data]);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-  }
+    return mainApi
+      .addNewMovie(movie, token)
+      .then((res) => {
+        setSavedMovies([...savedMovies, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const deleteMovie = (movie) => {
     const token = localStorage.getItem("token");
-    const movieId = savedMovies.find((savedMovie) => savedMovie.movieId === movie.movieId)._id;
-    return mainApi.removeMovie(movieId, token)
-    .then((res) => {
-      setSavedMovies(savedMovies.filter((savedMovie) => savedMovie.movieId !== movie.movieId));
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-  }
+    const movieId = savedMovies.find(
+      (savedMovie) => savedMovie.movieId === movie.movieId
+    )._id;
+    return mainApi
+      .removeMovie(movieId, token)
+      .then((res) => {
+        setSavedMovies(
+          savedMovies.filter(
+            (savedMovie) => savedMovie.movieId !== movie.movieId
+          )
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <CurrentUserContext.Provider
@@ -130,27 +139,21 @@ function App() {
         value={{
           saveMovie,
           deleteMovie,
-          savedMovies, 
+          savedMovies,
           setSavedMovies,
           moviesSearchResult,
-          setMoviesSearchResult
+          setMoviesSearchResult,
         }}
       >
         <Routes>
           <Route path="/" element={<Main />} />
           <Route
             path="/movies"
-            element={
-              <ProtectedRouteElement
-                element={Movies}
-              />
-            }
+            element={<ProtectedRouteElement element={Movies} />}
           />
           <Route
             path="/saved-movies"
-            element={
-              <ProtectedRouteElement element={SavedMovies}  />
-            }
+            element={<ProtectedRouteElement element={SavedMovies} />}
           />
           <Route
             path="/profile"
